@@ -1,0 +1,297 @@
+.results-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #0B0B0F;
+  color: #EAEAF0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.results-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Prototype Toggle */
+.prototype-toggle {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  overflow: hidden;
+  z-index: 50;
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: #8A8F98;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: 100px;
+  transition: all 0.2s ease;
+  box-shadow: none;
+}
+
+.toggle-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: 500;
+}
+
+/* Base structural layout */
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-text {
+  flex: 1;
+}
+
+.hero-visual {
+  flex: 1;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.subtext {
+  font-size: 1.25rem;
+  color: #EAEAF0;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.supporting-line {
+  font-size: 1rem;
+  color: #8A8F98;
+  border-left: 2px solid;
+  padding-left: 1rem;
+}
+
+/* Section Grids */
+.section-title {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.section-title::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+}
+
+.map-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+}
+
+.playbook-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* Cards & Elements */
+.data-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.card-title {
+  font-size: 1rem;
+  color: #EAEAF0;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.list-item {
+  color: #8A8F98;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+.list-item::before {
+  content: '→';
+}
+
+/* Timeline Custom Styles */
+.timeline-track {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  position: relative;
+}
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  z-index: 1;
+}
+
+.timeline-node {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.node-circle {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #0B0B0F;
+  border: 2px solid;
+}
+.node-label {
+  font-size: 0.75rem;
+  color: #8A8F98;
+  font-weight: 600;
+}
+.node-marker {
+  position: absolute;
+  top: 30px;
+  background: rgba(255,255,255,0.05);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+/* Radar Custom Fake Chart */
+.radar-item {
+  margin-bottom: 1rem;
+}
+.radar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #8A8F98;
+  margin-bottom: 0.5rem;
+}
+.radar-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.radar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+/* Archetype Theme Specifics */
+/* Builder Theme */
+.theme-builder .title { background-image: linear-gradient(90deg, #1FE0C9, #FF7A18); }
+.theme-builder .supporting-line { border-color: #FF7A18; }
+.theme-builder .node-circle { border-color: #FF7A18; }
+.theme-builder .list-item::before { color: #FF7A18; }
+.theme-builder .radar-fill { background: linear-gradient(90deg, #1FE0C9, #FF7A18); }
+.theme-builder .visual-graphic {
+  width: 200px;
+  height: 200px;
+  border: 2px dashed rgba(31, 224, 201, 0.4);
+  border-radius: 20px;
+  position: relative;
+  animation: jitter 4s infinite alternate;
+}
+.theme-builder .visual-graphic::before {
+  content: '';
+  position: absolute;
+  top: 20%; left: 20%; right: 20%; bottom: 20%;
+  border: 2px solid #FF7A18;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+/* Stabilist Theme */
+.theme-stabilist .title { background-image: linear-gradient(90deg, #1FE0C9, #0891b2); }
+.theme-stabilist .supporting-line { border-color: #1FE0C9; }
+.theme-stabilist .node-circle { border-color: #1FE0C9; }
+.theme-stabilist .list-item::before { color: #1FE0C9; }
+.theme-stabilist .radar-fill { background: linear-gradient(90deg, #1FE0C9, #0891b2); }
+.theme-stabilist .visual-graphic {
+  width: 200px;
+  height: 200px;
+  border: 2px solid rgba(31, 224, 201, 0.4);
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+}
+.theme-stabilist .visual-graphic div {
+  background: rgba(31, 224, 201, 0.1);
+}
+
+@keyframes jitter {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(10deg); }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+  .supporting-line {
+    border-left: none;
+    border-top: 2px solid;
+    padding-left: 0;
+    padding-top: 1rem;
+  }
+  .map-grid, .playbook-grid {
+    grid-template-columns: 1fr;
+  }
+}
