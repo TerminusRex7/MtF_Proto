@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import './App.css'
 import ResultsDashboard from './components/ResultsDashboard'
+import AdvancedExploration from './components/AdvancedExploration'
 
 const DOMAIN_OPTIONS = [
   "Technology & Innovation",
@@ -17,7 +18,9 @@ function App() {
   const [responses, setResponses] = useState({});
   const [selectedDomains, setSelectedDomains] = useState([]);
   const [isScanningFinished, setIsScanningFinished] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [archetypeData, setArchetypeData] = useState(null);
 
   const handleNext = () => {
     setCurrentStep(prev => prev + 1);
@@ -251,10 +254,13 @@ function App() {
   };
 
   const canProceed = () => {
-    if (screen.type === 'intro' || screen.type === 'transition') return true;
+    if (screen.type === 'intro') {
+      return responses.name && responses.name.trim() !== '';
+    }
+    if (screen.type === 'transition') return true;
     if (screen.type === 'multi-select') return selectedDomains.length > 0;
     if (screen.type === 'domain_deep_dive') {
-      const q1 = responses[`${screen.domain}_trust`];
+      const q1 = responses[`${screen.domain}_risk`];
       const q2 = responses[`${screen.domain}_timing`];
       return q1 && q2;
     }
@@ -262,9 +268,24 @@ function App() {
     return false;
   };
 
+  // If advanced exploration mode is triggered
+  if (showAdvanced) {
+    return (
+      <AdvancedExploration 
+        responses={responses} 
+        selectedDomains={selectedDomains} 
+        onComplete={(data) => {
+          setArchetypeData(data);
+          setShowAdvanced(false);
+          setShowResults(true);
+        }} 
+      />
+    );
+  }
+
   // If results mode is triggered, render dashboard
   if (showResults) {
-    return <ResultsDashboard responses={responses} />;
+    return <ResultsDashboard archetypeData={archetypeData} responses={responses} />;
   }
 
   const renderLeftPanel = () => {
@@ -283,8 +304,38 @@ function App() {
         {screen.instruction && <p className="header-accent" style={{marginBottom: '1rem', color: 'var(--text-secondary)'}}>{screen.instruction}</p>}
 
         {screen.type === 'intro' && (
+          <div style={{marginBottom: '2rem'}}>
+            <div style={{marginBottom: '1rem'}}>
+              <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)'}}>Name</label>
+              <input 
+                type="text" 
+                value={responses.name || ''} 
+                onChange={(e) => setResponse('name', e.target.value)}
+                placeholder="Enter your name"
+                style={{width: '100%', maxWidth: '400px', padding: '0.75rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.5)', color: '#fff'}}
+              />
+            </div>
+            <div>
+              <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)'}}>Email (Optional)</label>
+              <input 
+                type="email" 
+                value={responses.email || ''} 
+                onChange={(e) => setResponse('email', e.target.value)}
+                placeholder="Enter your email"
+                style={{width: '100%', maxWidth: '400px', padding: '0.75rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.5)', color: '#fff'}}
+              />
+              <p style={{fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.5rem', maxWidth: '400px'}}>
+                This will let you update your answers later and receive important updates and news.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {screen.type === 'intro' && (
           <div className="navigation-controls" style={{justifyContent: 'flex-start'}}>
-            <button onClick={handleNext} style={{padding: '1rem 3rem', fontSize: '1.25rem'}}>{screen.cta}</button>
+            <button onClick={handleNext} disabled={!canProceed()} style={{padding: '1rem 3rem', fontSize: '1.25rem'}}>
+              {screen.cta}
+            </button>
           </div>
         )}
 
@@ -322,13 +373,13 @@ function App() {
         {screen.type === 'domain_deep_dive' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '2rem' }}>
             <div>
-              <p style={{color: 'var(--text-primary)', marginBottom: '1rem', fontWeight: 500}}>How stable do you believe this system will be?</p>
+              <p style={{color: 'var(--text-primary)', marginBottom: '1rem', fontWeight: 500}}>What is the risk level for disruption in this domain?</p>
               <div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
-                {['High trust', 'Moderate trust', 'Low trust', 'Very low trust'].map(opt => (
+                {['High risk', 'Moderate risk', 'Low risk', 'Very low risk'].map(opt => (
                   <div key={opt} 
-                    className={`option-card ${responses[`${screen.domain}_trust`] === opt ? 'selected' : ''}`}
+                    className={`option-card ${responses[`${screen.domain}_risk`] === opt ? 'selected' : ''}`}
                     style={{padding: '0.75rem 1rem', fontSize: '0.9rem', flex: '1 1 calc(50% - 1rem)'}}
-                    onClick={() => setResponse(`${screen.domain}_trust`, opt)}>
+                    onClick={() => setResponse(`${screen.domain}_risk`, opt)}>
                     {opt}
                   </div>
                 ))}
@@ -359,7 +410,7 @@ function App() {
               </div>
             ) : (
               <div className="navigation-controls animate-fade-in" style={{justifyContent: 'flex-start', marginTop: '2rem'}}>
-                <button onClick={() => setShowResults(true)} style={{padding: '1rem 3rem', fontSize: '1.25rem'}}>
+                <button onClick={() => setShowAdvanced(true)} style={{padding: '1rem 3rem', fontSize: '1.25rem'}}>
                   Click to Continue
                 </button>
               </div>
